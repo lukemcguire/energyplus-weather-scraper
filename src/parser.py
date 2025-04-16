@@ -5,15 +5,36 @@ retrieved from the weather site, and to parse the specific 'LOCATION' line
 from the header of EPW files to extract metadata.
 """
 
+import logging
 
-def extract_links(html: str, base_url: str) -> tuple[list[str], list[str]]:  # type: ignore[empty-body]
-    """Finds all links on page."""
-    ...
+logger = logging.getLogger(__name__)
 
 
-def extract_epw_location_line(epw_content: bytes) -> str | None:
-    """Fetch the first line of an epw file."""
-    ...
+def extract_epw_location_line(epw_content: bytes, source_url: str) -> str | None:
+    """Fetch the first line of an epw file.
+
+    Args:
+        epw_content: The first 1024 bytes of an EPW file, encoded as utf-8.
+        source_url: The URL from which the epw_content was fetched (for logging).
+
+    Returns:
+        A string containing the first line of the EPW file, or None on error.
+    """
+    first_line = None
+    try:
+        epw_text = epw_content.decode(encoding="utf-8")
+        newline_pos = epw_text.find("\n")
+
+        if newline_pos != -1:
+            first_line = epw_text[:newline_pos].strip()
+        else:
+            logger.warning("No newline found in epw_content")
+    except UnicodeDecodeError:
+        logger.error(f"Unable to decode epw content (UTF-8) for URL: {source_url}")
+    except Exception as e:
+        logger.error(f"Unable to process first line for URL {source_url}: {e}", exc_info=True)
+    finally:
+        return first_line
 
 
 def parse_epw_location_line(line: str) -> dict[str, str]:
@@ -23,11 +44,11 @@ def parse_epw_location_line(line: str) -> dict[str, str]:
     LOCATION line specification, skipping the initial "LOCATION" identifier.
 
     Args:
-        line (str): The LOCATION line string from an EPW file.
+        line: The LOCATION line string from an EPW file.
 
     Returns:
-        dict[str, str]: A dictionary mapping standard EPW location fields to
-            their corresponding string values extracted from the line.
+        A dictionary mapping standard EPW location fields to their corresponding
+        string values extracted from the line.
 
     Raises:
         ValueError: If the epw location line format is unable to be parsed.

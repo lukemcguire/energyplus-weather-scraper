@@ -4,7 +4,7 @@ Stores constants used throughout the application, such as base URLs, API keys (i
 request delays, retry settings, output filenames, and data source priorities.
 """
 
-BASE_URL = "https://energyplus.net/weather"
+GEOJSON_URL = "https://energyplus.net/assets/weather/master.geojson"
 OUTPUT_CSV_FILENAME = "weather_file_locations.csv"
 REQUEST_DELAY = 0.5  # seconds
 MAX_RETRIES = 3

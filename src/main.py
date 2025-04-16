@@ -8,7 +8,7 @@ and triggers the saving of results to a CSV file upon completion.
 import logging
 import sys
 
-from src.config import BASE_URL, OUTPUT_CSV_FILENAME
+from src.config import OUTPUT_CSV_FILENAME
 from src.scraper import crawl
 from src.utils import locations_to_csv
 
@@ -37,11 +37,8 @@ def main() -> None:
     setup_logging()
     logging.info("Starting EnergyPlus weather scraper...")
 
-    visited_urls: set[str] = set()
-    url_queue = [BASE_URL]  # Start with the base URL
-
     try:
-        final_locations = crawl(url_queue, visited_urls)  # Assuming crawl manages queue/visited
+        final_locations = crawl([], set())
 
         if final_locations:
             logging.info(f"Scraping complete. Found {len(final_locations)} unique locations.")

@@ -175,3 +175,5 @@ cython_debug/
 
 # Project Specific
 structure.tree
+workplan.md
+tmp/
