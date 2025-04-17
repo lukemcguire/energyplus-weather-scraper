@@ -6,7 +6,8 @@ request delays, retry settings, output filenames, and data source priorities.
 
 GEOJSON_URL = "https://energyplus.net/assets/weather/master.geojson"
 OUTPUT_CSV_FILENAME = "weather_file_locations.csv"
-REQUEST_DELAY = 0.5  # seconds
+MIN_DELAY = 2
+MAX_DELAY = 5
 MAX_RETRIES = 3
 SOURCE_PRIORITY = {
     "TMY3": 10,
@@ -18,3 +19,14 @@ SOURCE_PRIORITY = {
     "TMY": 4,
     "CTZRV2": 3,
 }
+FIELD_NAMES = [
+    "location",
+    "region",
+    "country",
+    "weather_source",
+    "wmo_index",
+    "latitude",
+    "longitude",
+    "tz_offset",
+    "elevation",
+]

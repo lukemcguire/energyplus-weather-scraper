@@ -8,14 +8,14 @@ to avoid downloading more of the file than is necessary.
 
 import json
 import logging
-import time
 
 import requests
 from bs4 import BeautifulSoup
 
-from src.config import GEOJSON_URL, MAX_RETRIES, REQUEST_DELAY, SOURCE_PRIORITY
+from src.config import GEOJSON_URL, MAX_RETRIES, SOURCE_PRIORITY
 from src.data_handler import add_location
 from src.parser import extract_epw_location_line, parse_epw_location_line
+from src.utils import random_delay
 
 # Get a logger named after this module (e.g., 'src.scraper')
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ def scrape() -> dict[str, dict]:
                 logger.info("Download attempt failed for %s - Retrying...", url)
             epw_header = _fetch_epw_header(url)
             retries += 1
-            time.sleep(REQUEST_DELAY)
+            random_delay()
 
         if epw_header is None:
             logger.error("Unable to download EPW header information from URL : %s", url)

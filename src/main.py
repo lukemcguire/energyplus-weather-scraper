@@ -41,9 +41,9 @@ def main() -> None:
         final_locations = scrape()
 
         if final_locations:
-            logging.info(f"Scraping complete. Found {len(final_locations)} unique locations.")
+            logging.info("Scraping complete. Found %d unique locations.", len(final_locations))
             locations_to_csv(final_locations, OUTPUT_CSV_FILENAME)
-            logging.info(f"Data saved to {OUTPUT_CSV_FILENAME}")
+            logging.info("Data saved to %s", OUTPUT_CSV_FILENAME)
         else:
             logging.warning("Scraping finished, but no locations were collected.")
 

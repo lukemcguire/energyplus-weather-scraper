@@ -7,6 +7,8 @@ from the header of EPW files to extract metadata.
 
 import logging
 
+from src.config import FIELD_NAMES
+
 logger = logging.getLogger(__name__)
 
 
@@ -53,17 +55,7 @@ def parse_epw_location_line(line: str) -> dict[str, str]:
     Raises:
         ValueError: If the epw location line format is unable to be parsed.
     """
-    keys = [
-        "location",
-        "region",
-        "country",
-        "weather_source",
-        "wmo_index",
-        "latitude",
-        "longitude",
-        "tz_offset",
-        "elevation",
-    ]
+    keys = FIELD_NAMES
     # Split the line by commas
     data = line.split(",")
     if data[0] != "LOCATION" or len(keys) != len(data) - 1:
