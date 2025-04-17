@@ -12,7 +12,7 @@ import random
 import time
 from pathlib import Path
 
-from src.config import FIELD_NAMES, MAX_DELAY, MIN_DELAY
+from src.config import ALL_FIELD_NAMES, MAX_DELAY, MIN_DELAY
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def locations_to_csv(locations: dict[str, dict], output_filename: str) -> None:
         logger.info("Attempting to write %d locations to CSV: %s", len(locations), output_path)
 
         with open(output_path, "w", newline="", encoding="utf-8") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=FIELD_NAMES, extrasaction="ignore")
+            writer = csv.DictWriter(csvfile, fieldnames=ALL_FIELD_NAMES, extrasaction="ignore")
 
             writer.writeheader()
             for location_data in locations.values():

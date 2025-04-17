@@ -61,6 +61,9 @@ def scrape() -> dict[str, dict]:
             logger.error("Error processing %s : %s", url, e)
             continue
 
+        # include url in location dictionary
+        new_location["epw_url"] = url
+
         add_location(new_location, processed_locations, SOURCE_PRIORITY)
         successfully_processed += 1
         if successfully_processed % 50 == 0:

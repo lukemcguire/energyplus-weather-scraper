@@ -1,5 +1,6 @@
-# tests/test_data_handler.py
-from src.data_handler import add_location
+import pytest
+
+from src.data_handler import _clean_weather_source, add_location
 
 # Define a sample priority map for tests
 SAMPLE_PRIORITY = {"TMY3": 10, "TMY2": 9, "IWEC": 8}
@@ -112,3 +113,17 @@ def test_add_location_unknown_source_priority_defaults_to_zero():
     add_location(LOCATION_C_UNKNOWN_SOURCE, processed, SAMPLE_PRIORITY)
     assert len(processed) == 1
     assert processed["11223"] == location_c_iwec  # Should still be IWEC
+
+
+MALFORMED_WEATHER_SOURCES = [
+    ("TMY2-23232", "TMY2"),
+    ("IWEC Data", "IWEC"),
+    ("--WYEC2-B-14636", "WYEC2"),
+    ("  TMY--40309", "TMY"),
+]
+
+
+@pytest.mark.parametrize("test_input,expected", MALFORMED_WEATHER_SOURCES)
+def test_clean_weather_source(test_input, expected):
+    actual = _clean_weather_source(test_input)
+    assert actual == expected

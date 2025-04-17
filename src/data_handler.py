@@ -6,6 +6,7 @@ priority source type is kept when duplicates are encountered.
 """
 
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -28,24 +29,41 @@ def add_location(new_location: dict[str, str], processed_locations: dict[str, di
     """
     wmo_index = new_location["wmo_index"]
     location = new_location["location"]
+    new_weather_source = _clean_weather_source(new_location["weather_source"])
+    new_location["weather_source"] = new_weather_source
 
     if wmo_index not in processed_locations:
         processed_locations[wmo_index] = new_location
         logger.debug("%s added to processed locations with WMO Index : %s", location, wmo_index)
         return
 
-    new_weather_source = new_location["weather_source"]
-    existing_weather_wource = processed_locations[wmo_index]["weather_source"]
+    existing_weather_source = processed_locations[wmo_index]["weather_source"]
 
-    if priority.get(new_weather_source, 0) > priority.get(existing_weather_wource, 0):
+    if priority.get(new_weather_source, 0) > priority.get(existing_weather_source, 0):
         processed_locations[wmo_index] = new_location
         logger.info(
             "%s replaced in processed locations because %s has higher priority than %s",
             location,
             new_weather_source,
-            existing_weather_wource,
+            existing_weather_source,
         )
     else:
         logger.debug(
             "%s not updated in processed locations because weather file with higher priority already present.", location
         )
+
+
+def _clean_weather_source(source: str) -> str:
+    """Attempt to clean up the weather source string.
+
+    Args:
+        source: The weather source from the EPW file.
+
+    Returns:
+        The first group of alphanumeric characters in the weather source.
+    """
+    match = re.search(r"(\w+)", source)
+    if match:
+        return match.group(1)
+
+    return source

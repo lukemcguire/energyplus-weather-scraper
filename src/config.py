@@ -11,7 +11,7 @@ MAX_DELAY = 5
 MAX_RETRIES = 3
 SOURCE_PRIORITY = {
     "TMY3": 10,
-    "CWEC": 9,
+    "WYEC2": 9,
     "CSWD": 8,
     "IWEC": 7,
     "SWERA": 6,
@@ -19,7 +19,7 @@ SOURCE_PRIORITY = {
     "TMY": 4,
     "CTZRV2": 3,
 }
-FIELD_NAMES = [
+EPW_FIELD_NAMES = [
     "location",
     "region",
     "country",
@@ -30,3 +30,4 @@ FIELD_NAMES = [
     "tz_offset",
     "elevation",
 ]
+ALL_FIELD_NAMES = [*EPW_FIELD_NAMES, "epw_url"]
