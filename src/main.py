@@ -9,7 +9,7 @@ import logging
 import sys
 
 from src.config import OUTPUT_CSV_FILENAME
-from src.scraper import crawl
+from src.scraper import scrape
 from src.utils import locations_to_csv
 
 
@@ -38,7 +38,7 @@ def main() -> None:
     logging.info("Starting EnergyPlus weather scraper...")
 
     try:
-        final_locations = crawl([], set())
+        final_locations = scrape()
 
         if final_locations:
             logging.info(f"Scraping complete. Found {len(final_locations)} unique locations.")

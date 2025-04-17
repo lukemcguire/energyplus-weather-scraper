@@ -20,7 +20,7 @@ def extract_epw_location_line(epw_content: bytes, source_url: str) -> str | None
     Returns:
         A string containing the first line of the EPW file, or None on error.
     """
-    first_line = None
+    first_line = None  # only assigned if successful, otherwise will return None
     try:
         epw_text = epw_content.decode(encoding="utf-8")
         newline_pos = epw_text.find("\n")
@@ -30,11 +30,11 @@ def extract_epw_location_line(epw_content: bytes, source_url: str) -> str | None
         else:
             logger.warning("No newline found in epw_content")
     except UnicodeDecodeError:
-        logger.error(f"Unable to decode epw content (UTF-8) for URL: {source_url}")
+        logger.error("Unable to decode epw content (UTF-8) for URL: %s", source_url)
     except Exception as e:
-        logger.error(f"Unable to process first line for URL {source_url}: {e}", exc_info=True)
-    finally:
-        return first_line
+        logger.error("Unable to process first line for URL %s : %s", source_url, e, exc_info=True)
+
+    return first_line
 
 
 def parse_epw_location_line(line: str) -> dict[str, str]:

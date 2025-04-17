@@ -1,6 +1,6 @@
 import pytest
 
-from src.parser import parse_epw_location_line, extract_epw_location_line
+from src.parser import extract_epw_location_line, parse_epw_location_line
 
 
 def test_parse_valid_epw_line():
@@ -62,12 +62,14 @@ def test_parse_line_incorrect_field_count_raises_error():
     with pytest.raises(ValueError):
         parse_epw_location_line(bad_line_too_many)
 
+
 def test_extract_line_from_sample_bytes(sample_epw_header_bytes):
     """Test that we are able to extract the first line from a string of bytes."""
     expected_first_line = "LOCATION,Paso Robles Municipal Arpt,CA,USA,TMY3,723965,35.67,-120.63,-8.0,244.0"
     url = "https://fake.epw/url"
     extracted_line = extract_epw_location_line(sample_epw_header_bytes, url)
     assert extracted_line == expected_first_line
+
 
 def test_extract_line_without_newline():
     """Test that input without a newline character fails."""

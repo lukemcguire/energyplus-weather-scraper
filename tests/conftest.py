@@ -1,4 +1,5 @@
 # tests/conftest.py
+import json
 from pathlib import Path
 
 import pytest
@@ -24,3 +25,24 @@ def sample_epw_header_bytes() -> bytes:
 
 
 # You could add more fixtures for different header examples if needed
+
+
+@pytest.fixture
+def sample_geojson_data() -> dict:
+    """Provides parsed Python object from the sample_master.geojson fixture file.
+
+    Returns:
+        A dictionary to be used as a test fixture.
+    """
+    json_file = FIXTURES_DIR / "sample_master.geojson"
+    try:
+        with json_file.open("r", encoding="utf-8") as f:
+            # Parse the JSON file content into a Python object
+            data = json.load(f)
+        return data
+    except FileNotFoundError:
+        pytest.fail(f"Fixture file not found: {json_file}")
+    except json.JSONDecodeError as e:
+        pytest.fail(f"Error decoding JSON fixture file {json_file}: {e}")
+    except Exception as e:
+        pytest.fail(f"Error reading fixture file {json_file}: {e}")

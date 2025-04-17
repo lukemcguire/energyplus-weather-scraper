@@ -1,0 +1,43 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "DZA_Algiers.603900_IWEC",
+                "epw": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC/DZA_Algiers.603900_IWEC.epw>Download Weather File</a>",
+                "ddy": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC/DZA_Algiers.603900_IWEC.ddy>Download Design Day File</a>",
+                "stat": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC/DZA_Algiers.603900_IWEC.stat>Download Statistics File</a>",
+                "all": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC/DZA_Algiers.603900_IWEC.zip>Download All</a>",
+                "dir": "<a href=https://energyplus.net/weather-location/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC>Go To Folder</a>",
+                "mos": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/DZA/DZA_Algiers.603900_IWEC/DZA_Algiers.603900_IWEC.mos>Download Modelica Weather File</a>"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    3.25,
+                    36.72
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "title": "EGY_Al.Minya.623870_ETMY",
+                "epw": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY/EGY_Al.Minya.623870_ETMY.epw>Download Weather File</a>",
+                "ddy": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY/EGY_Al.Minya.623870_ETMY.ddy>Download Design Day File</a>",
+                "stat": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY/EGY_Al.Minya.623870_ETMY.stat>Download Statistics File</a>",
+                "all": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY/EGY_Al.Minya.623870_ETMY.zip>Download All</a>",
+                "dir": "<a href=https://energyplus.net/weather-location/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY>Go To Folder</a>",
+                "mos": "<a href=https://energyplus-weather.s3.amazonaws.com/africa_wmo_region_1/EGY/EGY_Al.Minya.623870_ETMY/EGY_Al.Minya.623870_ETMY.mos>Download Modelica Weather File</a>"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    30.73,
+                    28.08
+                ]
+            }
+        }
+    ]
+}
