@@ -1,16 +1,11 @@
 [project]
 name = "energyplus-weather-scraper"
-version = "0.1.0"
+version = "0.1.1"
 description = "energyplus wmo index scraper"
 readme = "README.md"
-authors = [
-    { name = "Luke McGuire", email = "luke.mcguire@gmail.com" }
-]
+authors = [{ name = "Luke McGuire", email = "luke.mcguire@gmail.com" }]
 requires-python = ">=3.13"
-dependencies = [
-    "beautifulsoup4>=4.13.3",
-    "requests>=2.32.3",
-]
+dependencies = ["beautifulsoup4>=4.13.3", "requests>=2.32.3"]
 
 [dependency-groups]
 dev = [
@@ -41,55 +36,67 @@ fix = true
 [tool.ruff.lint]
 preview = true
 select = [
-    # flake8-2020
-    "YTT",
-    # flake8-bandit
-    "S",
-    # flake8-bugbear
-    "B",
-    # flake8-builtins
-    "A",
-    # flake8-comprehensions
-    "C4",
-    # flake8-debugger
-    "T10",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
-    # mccabe
-    "C90",
-    # pycodestyle
-    "E", "W",
-    # pyflakes
-    "F",
-    # pygrep-hooks
-    "PGH",
-    # pyupgrade
-    "UP",
-    # ruff
-    "RUF",
-    # tryceratops
-    # "TRY",
-    # pydocstyle
-    "D",
-    # pydoclint
-    "DOC",
+    "FAST", # FastAPI - FastAPI specific rules
+    "YTT",  # flake8-2020 - checks for Python 2020 beest practices
+    "ANN",  # flake8-annotations - enforces type annotation style
+    "S",    # flake8-bandit - security issues
+    "BLE",  # flake8-blind-except – flags bare excepts
+    "FBT",  # flake8-boolean-trap – potential pitfalls with booleans
+    "B",    # flake8-bugbear - common bug patterns
+    "A",    # flake8-builtins - misuse of python builtin names
+    "C4",   # flake8-comprehensions - best practices in comprehensions
+    "DTZ",  # flake8-datetimez – requires timezone-aware datetime objects
+    "T10",  # flake8-debugger – debugger statements (e.g. pdb)
+    "SIM",  # flake8-simplify
+    "EM",   # flake8-errmsg – error message style
+    "EXE",  # flake8-executable – executable file checks
+    "FA",   # flake8-future-annotations – future import for annotations
+    "ISC",  # flake8-implicit-str-concat – warns on implicit string concatenation
+    "ICN",  # flake8-import-conventions – enforces conventional import aliases
+    "LOG",  # flake8-logging – proper logging usage
+    "G",    # flake8-logging-format – logging format string issues
+    "INP",  # flake8-no-pep420 – warns against non-PEP420 namespace usage
+    "PIE",  # flake8-pie – Python improvement suggestions
+    "PYI",  # flake8-pyi – checks for type stub (.pyi) consistency
+    "PT",   # flake8-pytest-style – pytest best practices
+    "Q",    # flake8-quotes – enforces quote style consistency
+    "RSE",  # flake8-raise – proper raise statement usage
+    "RET",  # flake8-return – return statement issues
+    "SLF",  # flake8-self – flags instance methods that don't use self
+    "SLOT", # flake8-slots – suggests use of __slots__ where appropriate
+    "SIM",  # flake8-simplify – code simplification hints
+    "TID",  # flake8-tidy-imports – enforces specific import styles (e.g., no relative imports)
+    "TC",   # flake8-type-checking – proper import of typing in type checks
+    "INT",  # flake8-gettext – checks for proper internationalization usage
+    "ARG",  # flake8-unused-arguments – flags unused function arguments
+    "PTH",  # flake8-use-pathlib – encourages pathlib over os.path
+    "TD",   # flake8-todos – flags TODO comments
+    "FIX",  # flake8-fixme – flags FIXME comments
+    "FLY",  # Flynt - f-string conversion suggestions
+    "I",    # isort - import ordering checks
+    "C90",  # mccabe - complexity metric for functions
+    "NPY",  # NumPy-specific rules - ensures NumPy coding standards
+    "PD",   # pandas-vet – checks pandas-specific code practices
+    "N",    # PEP8 Naming – naming conventions
+    "PERF", # Perflint – performance-related checks
+    "E",    # pycodestyle errors (style issues)
+    "W",    # pycodestyle warnings (style issues)
+    "DOC",  # pydoclint - docstring style
+    "D",    # pydocstyle - docstring formatting
+    "F",    # pyflakes - detects syntax erros and basic mistakes
+    "PGH",  # pygrep-hooks - custom grep hooks for linting
+    "UP",   # pyupgrade - upgrades syntax to newer Python versions
+    "RUF",  # Ruff-specific rules - additional ruff checks
+    "TRY",  # Tryceratops – try/except usage suggestions
 ]
 ignore = [
-    # LineTooLong
-    "E501",
-    # DoNotAssignLambda
-    "E731",
-    # suspicious-non-cryptographic-random-usage
-    "S311",
+    "E501", # line-too-long
+    "S311", # suspicious-non-cryptographic-random-usage
+    "D107", # undocumented-public-init
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["D", "S101"]
-
-[tool.ruff.format]
-preview = true
+"tests/*" = ["D", "S101", "ANN", "BLE", "TRY"]

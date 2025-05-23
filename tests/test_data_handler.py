@@ -123,7 +123,7 @@ MALFORMED_WEATHER_SOURCES = [
 ]
 
 
-@pytest.mark.parametrize("test_input,expected", MALFORMED_WEATHER_SOURCES)
+@pytest.mark.parametrize(("test_input", "expected"), MALFORMED_WEATHER_SOURCES)
 def test_clean_weather_source(test_input, expected):
     actual = _clean_weather_source(test_input)
     assert actual == expected

@@ -13,8 +13,12 @@ from src.scraper import scrape
 from src.utils import locations_to_csv
 
 
-def setup_logging() -> None:
-    """Configures logging to file and console."""
+def setup_logging() -> logging.Logger:
+    """Configures logging to file and console.
+
+    Returns:
+        A logger associated with main.py
+    """
     log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(name)s] %(message)s")
     root_logger = logging.getLogger()  # Get the root logger
     root_logger.setLevel(logging.INFO)  # Set minimum level to capture
@@ -29,28 +33,31 @@ def setup_logging() -> None:
     console_handler.setFormatter(log_formatter)
     root_logger.addHandler(console_handler)
 
-    logging.info("Logging configured.")  # Log that logging is set up
+    # main logger
+    logger = logging.getLogger(__name__)
+    logger.info("Logging configured.")  # Log that logging is set up
+    return logger
 
 
 def main() -> None:
     """Make a jazz noise here."""
-    setup_logging()
-    logging.info("Starting EnergyPlus weather scraper...")
+    logger = setup_logging()
+    logger.info("Starting EnergyPlus weather scraper...")
 
     try:
         final_locations = scrape()
 
         if final_locations:
-            logging.info("Scraping complete. Found %d unique locations.", len(final_locations))
+            logger.info("Scraping complete. Found %d unique locations.", len(final_locations))
             locations_to_csv(final_locations, OUTPUT_CSV_FILENAME)
-            logging.info("Data saved to %s", OUTPUT_CSV_FILENAME)
+            logger.info("Data saved to %s", OUTPUT_CSV_FILENAME)
         else:
-            logging.warning("Scraping finished, but no locations were collected.")
+            logger.warning("Scraping finished, but no locations were collected.")
 
     except Exception:
-        logging.critical("An unhandled error stopped the scraper!", exc_info=True)
+        logger.exception("An unhandled error stopped the scraper!")
     finally:
-        logging.info("Scraper finished.")
+        logger.info("Scraper finished.")
 
 
 if __name__ == "__main__":

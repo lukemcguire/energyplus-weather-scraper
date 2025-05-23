@@ -28,7 +28,7 @@ def scrape() -> dict[str, dict]:
         A dictionary of dictionaries containing the parsed location, weather
         station, and weather file data.
     """
-    logger.info(f"Begin scrape of {GEOJSON_URL} ...")
+    logger.info("Begin scrape of %s ...", GEOJSON_URL)
     locations = _fetch_geojson(GEOJSON_URL)
     urls = _get_epw_file_urls(locations)
     processed_locations: dict[str, dict] = {}
@@ -37,7 +37,7 @@ def scrape() -> dict[str, dict]:
     for i, url in enumerate(urls):
         epw_header: bytes | None = None
         retries = 0
-        logger.debug(f"Attempting to download epw file data from {url}")
+        logger.debug("Attempting to download epw file data from %s", url)
         while epw_header is None and retries < MAX_RETRIES:
             if retries > 0:
                 logger.info("Download attempt failed for %s - Retrying...", url)
@@ -57,8 +57,8 @@ def scrape() -> dict[str, dict]:
 
         try:
             new_location = parse_epw_location_line(first_line)
-        except ValueError as e:
-            logger.error("Error processing %s : %s", url, e)
+        except ValueError:
+            logger.exception("Error processing %s", url)
             continue
 
         # include url in location dictionary
@@ -115,12 +115,12 @@ def _fetch_geojson(url: str) -> list[dict]:
 
         logger.info("Successfully fetched and parsed GeoJSON from %s. Found %d features", url, len(locations))
 
-    except requests.exceptions.RequestException as e:
-        logger.error("Request failed for GeoJSON URL %s: %s", url, e)
-    except json.JSONDecodeError as e:
-        logger.error("Failed to parse JSON from URL %s: %s", url, e)
-    except Exception as e:
-        logger.error("An unexpected error occurred processing GeoJSON from %s : %s", url, e, exc_info=True)
+    except requests.exceptions.RequestException:
+        logger.exception("Request failed for GeoJSON URL %s", url)
+    except json.JSONDecodeError:
+        logger.exception("Failed to parse JSON from URL %s", url)
+    except Exception:
+        logger.exception("An unexpected error occurred processing GeoJSON from %s", url)
 
     return locations
 
@@ -167,7 +167,7 @@ def _extract_url_from_anchor(html_snippet: str | None) -> str | None:
         logger.debug("Received empty or None HTML snippet.")
         return None
 
-    url = None
+    url: str | None = None
     try:
         soup = BeautifulSoup(html_snippet, "html.parser")
         anchor_tag = soup.find("a")
@@ -180,8 +180,8 @@ def _extract_url_from_anchor(html_snippet: str | None) -> str | None:
                 logger.warning("Found anchor tag but no 'href' in snippet: %s", html_snippet)
         else:
             logger.warning("No anchor tag found in snippet: %s", html_snippet)
-    except Exception as e:
-        logger.error("Error parsing HTML snippet'%s': %s", html_snippet, e, exc_info=True)
+    except Exception:
+        logger.exception("Error parsing HTML snippet'%s': %s", html_snippet)
 
     return url
 
@@ -212,11 +212,11 @@ def _fetch_epw_header(epw_file_url: str) -> bytes | None:
             logger.warning("Unable to process response from %s with status code %d", epw_file_url, response.status_code)
             return None
 
+    except requests.exceptions.RequestException:
+        logger.exception("Request failed for EPW URL %s: %s")
+        return None
+    except Exception:
+        logger.exception("An unexpected error occurred processing EPW file from %s : %s")
+        return None
+    else:
         return response.content
-
-    except requests.exceptions.RequestException as e:
-        logger.error("Request failed for EPW URL %s: %s", epw_file_url, e)
-        return None
-    except Exception as e:
-        logger.error("An unexpected error occurred processing EPW file from %s : %s", epw_file_url, e, exc_info=True)
-        return None

@@ -39,10 +39,11 @@ def sample_geojson_data() -> dict:
         with json_file.open("r", encoding="utf-8") as f:
             # Parse the JSON file content into a Python object
             data = json.load(f)
-        return data
     except FileNotFoundError:
         pytest.fail(f"Fixture file not found: {json_file}")
     except json.JSONDecodeError as e:
         pytest.fail(f"Error decoding JSON fixture file {json_file}: {e}")
     except Exception as e:
         pytest.fail(f"Error reading fixture file {json_file}: {e}")
+    else:
+        return data

@@ -14,6 +14,13 @@ logger = logging.getLogger(__name__)
 DECODING_SCHEMES = ["utf-8", "iso-8859-1"]
 
 
+class MalformedLocationDataError(ValueError):
+    """Error when receiving malformed epw header data."""
+
+    def __init__(self) -> None:
+        super().__init__("unable to parse epw location")
+
+
 def extract_epw_location_line(epw_content: bytes, source_url: str) -> str | None:
     """Fetch the first line of an epw file.
 
@@ -57,13 +64,14 @@ def _try_decode_bytes(content: bytes, url: str) -> str | None:
                 logger.warning("Successfully decoded using '%s' for %s", encoding, url)
             else:
                 logger.debug("Successfully decoded using '%s' for %s", encoding, url)
-            return decoded_text
         except UnicodeDecodeError:
             logger.debug("Decoding failed using '%s' for %s. Trying next...", encoding, url)
             continue
-        except Exception as e:
-            logger.error("Unexpected error during %s decoding for url %s : %s", encoding, url, e, exc_info=True)
+        except Exception:
+            logger.exception("Unexpected error during %s decoding for url %s", encoding, url)
             return None
+        else:
+            return decoded_text
 
     # If the loop completes without returning, all attempts have failed.
     logger.error(
@@ -86,13 +94,13 @@ def parse_epw_location_line(line: str) -> dict[str, str]:
         string values extracted from the line.
 
     Raises:
-        ValueError: If the epw location line format is unable to be parsed.
+        MalformedLocationDataError: If the epw location line format is unable to be parsed.
     """
     keys = EPW_FIELD_NAMES
     # Split the line by commas
     data = line.split(",")
     if data[0] != "LOCATION" or len(keys) != len(data) - 1:
-        raise ValueError("unable to parse epw location")
+        raise MalformedLocationDataError
     # Discard the first element ("LOCATION")
     data = data[1:]
     data[0] = data[0].title()

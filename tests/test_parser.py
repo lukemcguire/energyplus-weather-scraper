@@ -1,6 +1,6 @@
 import pytest
 
-from src.parser import extract_epw_location_line, parse_epw_location_line
+from src.parser import MalformedLocationDataError, extract_epw_location_line, parse_epw_location_line
 
 
 def test_parse_valid_epw_line():
@@ -46,7 +46,7 @@ def test_parse_line_missing_location_prefix_raises_error():
     """Test that a line not starting with 'LOCATION,' raises ValueError."""
     bad_line = "NOLOCATION,Paso Robles Municipal Arpt,CA,USA,TMY3,723965,35.67,-120.63,-8.0,244.0"
     # We expect a ValueError (or maybe a custom exception)
-    with pytest.raises(ValueError):
+    with pytest.raises(MalformedLocationDataError):
         parse_epw_location_line(bad_line)
 
 
@@ -54,12 +54,12 @@ def test_parse_line_incorrect_field_count_raises_error():
     """Test that lines with too few or too many fields raise ValueError."""
     # Too few fields (should be 10 fields total, 9 after 'LOCATION,')
     bad_line_too_few = "LOCATION,Paso Robles Municipal Arpt,CA,USA,TMY3,723965,35.67,-120.63,-8.0"
-    with pytest.raises(ValueError):
+    with pytest.raises(MalformedLocationDataError):
         parse_epw_location_line(bad_line_too_few)
 
     # Too many fields
     bad_line_too_many = "LOCATION,Paso Robles Municipal Arpt,CA,USA,TMY3,723965,35.67,-120.63,-8.0,244.0,EXTRA_FIELD"
-    with pytest.raises(ValueError):
+    with pytest.raises(MalformedLocationDataError):
         parse_epw_location_line(bad_line_too_many)
 
 

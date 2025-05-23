@@ -41,7 +41,7 @@ def locations_to_csv(locations: dict[str, dict], output_filename: str) -> None:
         logger.info("Ensured output directory exists: %s", output_dir)
         logger.info("Attempting to write %d locations to CSV: %s", len(locations), output_path)
 
-        with open(output_path, "w", newline="", encoding="utf-8") as csvfile:
+        with Path(output_path).open("w", newline="", encoding="utf-8") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=ALL_FIELD_NAMES, extrasaction="ignore")
 
             writer.writeheader()
@@ -50,12 +50,12 @@ def locations_to_csv(locations: dict[str, dict], output_filename: str) -> None:
 
         logger.info("Successfully wrote %d locations to %s", len(locations), output_path)
 
-    except OSError as e:
-        logger.error("Error writing to CSV file %s: %s", output_path, e, exc_info=True)
-    except csv.Error as e:
-        logger.error("CSV specific error writing to %s: %s", output_path, e, exc_info=True)
-    except Exception as e:
-        logger.error("Unexpected error writing locations to CSV %s: %s", output_path, e, exc_info=True)
+    except OSError:
+        logger.exception("Error writing to CSV file %s: %s", output_path)
+    except csv.Error:
+        logger.exception("CSV specific error writing to %s: %s", output_path)
+    except Exception:
+        logger.exception("Unexpected error writing locations to CSV %s: %s", output_path)
 
 
 def random_delay(min_delay: float = MIN_DELAY, max_delay: float = MAX_DELAY) -> None:
@@ -68,6 +68,8 @@ def random_delay(min_delay: float = MIN_DELAY, max_delay: float = MAX_DELAY) -> 
         min_delay: The minimum delay in seconds.
         max_delay: The maximum delay in seconds.
     """
+    # Initialize delay
+    delay: float = 0
     # Ensure min_delay is not greater than max_delay
     if min_delay > max_delay:
         # Swap them if they are inverted
